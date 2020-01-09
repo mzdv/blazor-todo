@@ -1,0 +1,27 @@
+﻿@using BlazorToDo.Services
+@inject CardModelService CardModelService
+
+<div class="border p-3 m-2">
+    <h3>@Data.Title</h3>
+    <p>@Data.Content</p>
+    <EditForm Model="@Data">
+        <label for="done">Task done:</label>
+        <InputCheckbox id="done" @bind-Value="Data.Done" />
+    </EditForm>
+    <button class="btn btn-danger" @onclick="Delete">Delete</button>
+</div>
+
+@code {
+    [Parameter]
+    public BlazorToDo.Models.CardModel Data { get; set; }
+
+    [Parameter]
+    public Action RefreshCards { get; set; }
+
+    private void Delete()
+    {
+        bool isDeleted = CardModelService.DeleteCard(Data.Id);
+
+        RefreshCards();
+    }
+}

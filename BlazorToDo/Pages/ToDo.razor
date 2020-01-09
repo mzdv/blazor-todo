@@ -1,0 +1,32 @@
+﻿@page "/todo"
+
+@using BlazorToDo.Services
+@inject CardModelService CardModelService
+
+    <div class="text-center">
+        <h3>To Do</h3>
+        <p>Important stuff you need to do </p>
+    </div>
+
+    <div id="cards">
+            @foreach (CardModel card in cards)
+            {
+                <Card Data="@card" RefreshCards="RefreshCards"/>
+            }
+    </div>
+@code {
+
+    private List<CardModel> cards = new List<CardModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        cards = await CardModelService.GetCards();
+    }
+
+    public async void RefreshCards()
+    {
+        cards = await CardModelService.GetCards();
+
+        base.StateHasChanged();
+    }
+}
